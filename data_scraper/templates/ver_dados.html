@@ -1,0 +1,86 @@
+<html lang="pt-br">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="/static/images/icon.png"/>
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/static/CSS/reset.css">
+        <link rel="stylesheet" href="/static/CSS/main.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        
+        <title>CDM - Bem-vindo!</title>
+    </head>
+    <body>
+        <div class="container-fluid d-flex h-100">
+            <div id="bemvindo" class="row m-auto px-5">
+                
+                <div class="col-9">
+                    <h1 class="display-4 text-uppercase">Dados Meteorológicos</h1>                                          
+                    <div class="row mb-3">
+                        <div class="col d-flex">                                                      
+                            <p class="lead my-3">Os dados abaixo são do periodo de {{startdate}} até {{enddate}}</p>  
+                            <a class="btn btn-primary my-auto ml-auto" href="{% url 'ver_dados' %}" role="button">Voltar</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex">                            
+                            <table></table>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Temperature (ºF)</th>
+                                        <th scope="col">Wind dir.</th>
+                                        <th scope="col">Wind (mph)</th>
+                                        <th scope="col">Dewpoint</th>
+                                        <th scope="col">Precip rate</th>
+                                        <th scope="col">Pressure</th>
+                                        <th scope="col">Humidity</th>
+                                        <th scope="col">Precip Accum</th>
+                                        <th scope="col">UV</th>
+                                        <th scope="col">Fonte</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for data in datas %}
+                                    <tr>
+                                        <th scope="row">{{ loop.index }}</th>
+                                        <td>{{ data.date }}</td>
+                                        <td>{{ data.temperature }}</td>
+                                        <td>{{ data.wind_gust_direction }}</td>
+                                        <td>{{ data.wind_gust }}</td>
+                                        <td>{{ data.dewpoint }}</td>
+                                        <td>{{ data.precip_rate }}</td>
+                                        <td>{{ data.pressure }}</td>
+                                        <td>{{ data.humidity }}</td>
+                                        <td>{{ data.precip_accum }}</td>
+                                        <td>{{ data.uv }}</td>
+                                        <td>{{ data.fonte }}</td>
+                                    </tr>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <img class="logo" src="/static/images/icone.jpg" alt="ops">
+                </div>
+            </div>
+        </div>
+        <div style="text-align: end; position: fixed; bottom: 0; width: 100vw; padding: 20px 20px;">
+            <p>Página sem fins lucrativos.</p>
+        </div>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </body>
+</html></div></html>

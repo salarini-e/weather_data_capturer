@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/static/images/icon.png"/>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/CSS/reset.css">
+    <link rel="stylesheet" href="/static/CSS/main.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>CDM - Bem-vindo!</title>
+</head>
+<body>
+    <div class="container-fluid d-flex h-100">
+        <div id="bemvindo" class="row m-auto px-5">
+            <div class="col">
+                <h1 class="display-4 text-uppercase">Download dos Dados</h1>
+                <p class="lead my-3">Aqui você irá gerar um arquivo CSV dos dados guardados em nosso banco de dados.</p>
+                <hr class="my-4">
+                <p class="mb-4">Selecione o intervalo dos dados:</p>
+                <form method="POST" class="w-100">
+                    {% csrf_token %}
+                    <div class="form-row d-flex">
+                        <div class="col-auto">
+                            <label for="source" class="sr-only">Fonte</label>
+                            <select class="form-control mb-2" id="fonte" name="fonte" required>
+                                <option value="">Selecione a Fonte</option>
+                                {% for fonte in fontes %}
+                                <option value="{{fonte.0}}">{{fonte.0}} - {{fonte.1}}</option>
+                                {% endfor %}
+                                <!-- Add more options as needed -->
+                            </select>
+                        </div>
+                        <div class="col-auto">
+                            <label for="startdate" class="sr-only">Data de Início</label>
+                            <input type="date" class="form-control mb-2" id="startdate" name="startdate" required>
+                        </div>
+                        <div class="col-auto">
+                            <label for="enddate" class="sr-only">Data de Fim</label>
+                            <input type="date" class="form-control mb-2" id="enddate" name="enddate" required>
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-success mb-2"><i class="fas fa-file-download mr-2"></i>Download</button>
+                        </div>
+                        <div class="col d-flex">
+                            <a href="/" class="btn btn-primary mb-2 ml-auto">Voltar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>          
+        </div>
+    </div>
+    <div style="text-align: end; position: fixed; bottom: 0; width: 100vw; padding: 20px 20px;">
+        <p>Página sem fins lucrativos.</p>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

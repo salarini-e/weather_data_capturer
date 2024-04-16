@@ -1,0 +1,52 @@
+<html lang="pt-br">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="/static/images/icon.png"/>
+        <!-- Bootstrap CSS -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/static/CSS/reset.css">
+        <link rel="stylesheet" href="/static/CSS/main.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        
+        <title>CDM - Bem-vindo!</title>
+    </head>
+    <body>
+        <div class="container-fluid d-flex h-100">
+            <div id="bemvindo" class="row m-auto px-5">
+                
+                <div class="col-9">
+                    <h1 class="display-4 text-uppercase">Capturador de Dados Meteorológicos</h1>
+                    <p class="lead my-3"><strong>Bem vindo!</strong> Aqui você tem acesso aos dados de quatro estações meteorológicas localizadas em Nova Friburgo.</p>
+                    <hr class="my-4">
+                    <p class="mb-3">Estas estações são mantidas pelo <strong><i><u>Instituto Friburgo Solidário</u></i></strong>, e neste site, os dados são obtidos por meio de mineração das páginas de cada estação a cada hora.</p>
+                    <p class="mb-4">Explore as informações coletados regularmente:</p>
+                    <div class="row">
+                        <div class="col d-flex">                            
+                            <a class="btn btn-success mr-1" href="{% url 'download' %}" role="button"><i class="fas fa-file-csv mr-2"></i>Gerar arquivo</a>
+                            <a class="btn btn-primary mr-1" href="{% url 'ver_dados' %}" role="button"><i class="fas fa-list mr-2"></i>Consultar online</a>
+                            <a class="btn btn-primary mr-1" href="{% url 'fontes' %}" role="button"><i class="fas fa-link mr-2"></i>Ver fontes</a>
+                            <a class="btn btn-secondary mr-1" href="{% url 'fontes' %}" role="button"><i class="fas fa-info-circle mr-2"></i>Saiba mais</a>
+                            
+                            <a class="btn btn-warning ml-auto" href="#" role="button"><i class="fas fa-bug mr-2"></i>Log de falhas</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <img class="logo" src="/static/images/icone.jpg" alt="ops">
+                </div>
+            </div>
+        </div>
+        <div style="text-align: end; position: fixed; bottom: 0; width: 100vw; padding: 20px 20px;">
+            <p>Página sem fins lucrativos.</p>
+        </div>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </body>
+</html></div></html>
