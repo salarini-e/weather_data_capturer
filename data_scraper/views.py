@@ -138,7 +138,7 @@ def export_weather_data(request):
 
         # Escreva os dados no arquivo CSV
         writer = csv.writer(response)
-        writer.writerow(['Date', 'Temperature', 'Wind_Gust', 'Dewpoint', 'Precip_Rate', 'Pressure', 'Humidity', 'Precip_Accum', 'UV', 'Fonte'])
+        writer.writerow(['Date', 'Temperature', 'Wind_Gust_Direction', 'Wind_Gust', 'Dewpoint', 'Precip_Rate', 'Pressure', 'Humidity', 'Precip_Accum', 'UV', 'Fonte'])
         for data in weather_data:
             writer.writerow([
                 data.date.strftime('%Y-%m-%d %H:%M:%S'),
