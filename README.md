@@ -26,6 +26,7 @@ Do your first data collection
 
 ```shell
 curl 127.0.0.1:8000/get_data/ -s -o /dev/null
+curl 127.0.0.1:8000/create_demo_sources/ -s -o /dev/null
 ```
 
 Then open your browser in [localhost:8000](http://127.0.0.1:8000)
