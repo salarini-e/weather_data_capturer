@@ -1,21 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/static/images/icon.png"/>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/CSS/reset.css">
-    <link rel="stylesheet" href="/static/CSS/main.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <title>CDM - Bem-vindo!</title>
-</head>
-<body>
-    <div class="container-fluid d-flex h-100">
+{% extends 'template.html' %}
+{% block css %}
+{% endblock %}
+{% block content %}
         <div id="bemvindo" class="row m-auto px-5">
             <div class="col">
                 <h1 class="display-4 text-uppercase">Download dos Dados</h1>
@@ -53,14 +39,6 @@
                 </form>
             </div>          
         </div>
-    </div>
-    <div style="text-align: end; position: fixed; bottom: 0; width: 100vw; padding: 20px 20px;">
-        <p></p>
-    </div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% endblock %}
+{% block js %}
+{% endblock %}

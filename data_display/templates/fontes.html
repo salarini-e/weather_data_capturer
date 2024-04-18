@@ -1,0 +1,26 @@
+{% extends 'template.html' %}
+{% block css %}
+{% endblock %}
+{% block content %}
+            <div id="bemvindo" class="row m-auto px-5">
+                
+                <div class="col-9 d-flex flex-column">
+                    <h1 class="text-uppercase">Capturador de Dados Meteorológicos</h1>
+                    <h1 class="display-3 text-uppercase">Fontes dos dados</h1>
+                    <hr class="my-4">
+                    <ul>
+                        {% for fonte in fontes %}
+                        <li class="mb-2">{{fonte.id}}. {{fonte.name}}<br>
+                            <a href="{{fonte.url}}">{{fonte.url}}</a>                            
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <a href="/" class="mt-5 btn btn-primary mx-auto">Voltar</a>
+                </div>
+                <div class="col-3">
+                    <img class="logo" src="/static/images/icone.jpg" alt="icone estação meteorológica">
+                </div>
+            </div>
+{% endblock %}
+{% block js %}
+{% endblock %}

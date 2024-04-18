@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-68((!5k4h-hf8l&kwms7v_p0p)^qms-6&0unm4r93u=)z^%$7r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['vps52605.publiccloud.com.br', 'cdm.esalarini.com.br', '127.0.0.1']
+ALLOWED_HOSTS = ['cdm.esalarini.com.br', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'data_scraper',
+    'data_display',
 ]
 
 MIDDLEWARE = [
@@ -119,6 +120,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
