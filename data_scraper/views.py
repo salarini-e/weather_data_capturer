@@ -1,98 +1,95 @@
-from django.shortcuts import render
-import requests
+import csv
+import json
+from datetime import date
+from datetime import datetime
+import logging
+
 from bs4 import BeautifulSoup
 from django.http import HttpResponse
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
-import json
-from django.http import JsonResponse
+
 from .models import WeatherData
-import csv
-from datetime import datetime
-from django.views.decorators.csrf import csrf_exempt
-from datetime import date
+
 
 def index(request):
     return render(request, 'index.html')
 
+
 def fontes(request):
     return render(request, 'fontes.html')
 
+
+def fetch_dados_via_bs(driver, fonte):
+    soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+    dashboard_content = soup.find('div', class_='dashboard__module__content')
+    value_element = dashboard_content.find_all('span', class_='wu-value')
+    dados_ = []
+    for value in value_element:
+        dados_.append(value.text)
+    return {
+        'temperature': dados_[0],
+        'wind_gust_direction': dados_[2],
+        'wind_gust': dados_[3],
+        'dewpoint': dados_[4],
+        'precip_rate': dados_[5],
+        'pressure': dados_[6],
+        'humidity': dados_[7],
+        'precip_accum': dados_[8],
+        'uv': dados_[9],
+        'fonte': fonte
+    }
+
+
+def fetch_dados_via_webdriver(driver, fonte):
+    values = list(map(lambda e: e.text, driver.find_elements(By.CSS_SELECTOR, ".dashboard__module__content .wu-value")))
+    return {
+        'temperature': values[0],
+        'wind_gust_direction': values[2],
+        'wind_gust': values[3],
+        'dewpoint': values[4],
+        'precip_rate': values[5],
+        'pressure': values[6],
+        'humidity': values[7],
+        'precip_accum': values[8],
+        'uv': values[9],
+        'fonte': fonte
+    }
+
+
 def verificar_status(request):
-    FONTES =[   
+    FONTES = [
                 ('1', "https://www.wunderground.com/dashboard/pws/INOVAF18"),
                 ('2', "https://www.wunderground.com/dashboard/pws/INOVAF19"),
                 ('3', "https://www.wunderground.com/dashboard/pws/INOVAF27"),
                 ('4', "https://www.wunderground.com/dashboard/pws/INOVAF26")
             ]
-    
+    dados = {}
     for i in FONTES:
         url = i[1]
     
         chrome_options = Options()
         chrome_options.add_argument("--headless")
-
         driver = webdriver.Chrome(options=chrome_options)
-        
-        driver.get(url)
-        WebDriverWait(driver, 100)    
-        dados_ = []
-        try:        
-            soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-            dashboard_content = soup.find('div', class_='dashboard__module__content')
-            value_element = dashboard_content.find_all('span', class_='wu-value')
-            for value in value_element:
-                dados_.append(value.text)
-
-            dados = {
-                'temperature': dados_[0],
-                'wind_gust_direction': dados_[2],
-                'wind_gust': dados_[3],
-                'dewpoint': dados_[4],
-                'precip_rate': dados_[5],
-                'pressure': dados_[6],
-                'humidity': dados_[7],
-                'precip_accum': dados_[8],
-                'uv': dados_[9],
-                'fonte': i[0]
-            }
-
-            weather_data = WeatherData.objects.create(**dados)        
-            # soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-            # dashboard_content = soup.find('div', class_='dashboard__module__content')
-            # value_element = dashboard_content.find('span', class_='wu-value')
-            # dados['temperatura'] = value_element.text   
-            # wind_gust = soup.find('div', class_='weather__data weather__wind-gust')
-            # wind_gust_text = wind_gust.find('div', class_='weather__text')
-            # dados['vento_rajada'] =  []
-            # values = wind_gust_text.find_all('span', class_='wu-value')
-            # dados['vento_rajada'].append(values[0].text)
-            # dados['vento_rajada'].append(values[1].text)
-        except Exception as e:
-            print(e)
-            dados = {
-                'temperature': 'null',
-                'wind_gust_direction': 'null',
-                'wind_gust': 'null',
-                'dewpoint': 'null',
-                'precip_rate': 'null',
-                'pressure': 'null',
-                'humidity': 'null',
-                'precip_accum': 'null',
-                'uv': 'null',
-                'fonte': i[0]
-            }
-
-            weather_data = WeatherData.objects.create(**dados)  
+        try:
+            driver.get(url)
+            WebDriverWait(driver, 100)
+            # dados = fetch_dados_via_bs(driver, i[0])
+            dados = fetch_dados_via_webdriver(driver, i[0])
+            WeatherData.objects.create(**dados)
+        except Exception as ex:
+            logging.warning("Can't fetch", ex, url)
         finally:
             driver.quit()
     return HttpResponse(json.dumps(dados), content_type="application/json")
-    
+
+
 def dados(request):
         dados = WeatherData.objects.all()
         valores = []
