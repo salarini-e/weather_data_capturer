@@ -7,6 +7,7 @@ import logging
 from bs4 import BeautifulSoup
 from django.http import HttpResponse
 from django.http import JsonResponse
+from django.core.serializers import serialize
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from selenium import webdriver
@@ -25,7 +26,9 @@ def fontes(request):
     return render(request, 'fontes.html')
 
 
+
 def fetch_dados_via_bs(driver, fonte):
+
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
     dashboard_content = soup.find('div', class_='dashboard__module__content')
@@ -70,24 +73,30 @@ def verificar_status(request):
                 ('3', "https://www.wunderground.com/dashboard/pws/INOVAF27"),
                 ('4', "https://www.wunderground.com/dashboard/pws/INOVAF26")
             ]
+
     dados = {}
+
     for i in FONTES:
         url = i[1]
-    
+        fonte = i[0]
+
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         driver = webdriver.Chrome(options=chrome_options)
         try:
             driver.get(url)
             WebDriverWait(driver, 100)
-            # dados = fetch_dados_via_bs(driver, i[0])
+            
             dados = fetch_dados_via_webdriver(driver, i[0])
             WeatherData.objects.create(**dados)
+
         except Exception as ex:
             logging.warning("Can't fetch", ex, url)
         finally:
             driver.quit()
+
     return HttpResponse(json.dumps(dados), content_type="application/json")
+
 
 
 def dados(request):
@@ -152,7 +161,7 @@ def export_weather_data(request):
             ])
 
         return response
-    
+
     return render(request, 'filter.html', context={'fontes': WeatherData.FONTE_CHOICES})
 
 
@@ -160,16 +169,13 @@ def export_weather_data(request):
 def view_weather_data(request):
     context={'fontes': WeatherData.FONTE_CHOICES}
     if request.method == 'POST':
-        
         start_date_str = request.POST.get('startdate')
         end_date_str = request.POST.get('enddate')
         fonte = request.POST.get('fonte')
 
-        
         start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
-        
-        
+
         weather_data = WeatherData.objects.filter(date__range=(start_date, end_date), fonte=fonte)
         context['startdate'] = start_date_str
         context['enddate'] = end_date_str
