@@ -72,3 +72,13 @@ def get_dados(request):
         finally:
             driver.quit()
     return HttpResponse(json.dumps(wds), content_type="application/json")
+
+def create_demo_sources(request):
+    if DataSource.objects.all().exists():
+        return HttpResponse("OK. DEMO SOURCES ALREADY CREATED")
+    
+    DataSource.objects.create(name="Pico do Caledônia", url="https://www.wunderground.com/dashboard/pws/IRIOGRAN2")
+    DataSource.objects.create(name="Stucky", url="https://www.wunderground.com/dashboard/pws/IRIOGRAN3")
+    DataSource.objects.create(name="Barão (Jardim Califórnia)", url="https://www.wunderground.com/dashboard/pws/IRIOGRAN4")
+    DataSource.objects.create(name="Edifício Itália (Centro)", url="https://www.wunderground.com/dashboard/pws/IRIOGRAN5")
+    return HttpResponse("OK. DEMO SOURCES CREATED")
