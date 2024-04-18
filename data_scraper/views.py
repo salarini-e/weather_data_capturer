@@ -26,7 +26,9 @@ def fontes(request):
     return render(request, 'fontes.html')
 
 
-def find_dados_via_bs(driver):
+
+def fetch_dados_via_bs(driver, fonte):
+
     soup = BeautifulSoup(driver.page_source, 'html.parser')
 
     dashboard_content = soup.find('div', class_='dashboard__module__content')
@@ -43,18 +45,24 @@ def find_dados_via_bs(driver):
         'pressure': dados_[6],
         'humidity': dados_[7],
         'precip_accum': dados_[8],
-        'uv': dados_[9]
+        'uv': dados_[9],
+        'fonte': fonte
     }
 
 
-def find_dados_via_webdriver(driver):
+def fetch_dados_via_webdriver(driver, fonte):
+    values = list(map(lambda e: e.text, driver.find_elements(By.CSS_SELECTOR, ".dashboard__module__content .wu-value")))
     return {
-        k: element.text for k, element in zip(
-            ["temperature", None, "wind_gust_direction", "wind_gust", "dewpoint", "precip_rate", "pressure", "humidity",
-             "precip_accum", "uv"],
-            driver.find_elements(By.CSS_SELECTOR, "div.dashboard__module__content span.wu-value")
-        )
-        if k
+        'temperature': values[0],
+        'wind_gust_direction': values[2],
+        'wind_gust': values[3],
+        'dewpoint': values[4],
+        'precip_rate': values[5],
+        'pressure': values[6],
+        'humidity': values[7],
+        'precip_accum': values[8],
+        'uv': values[9],
+        'fonte': fonte
     }
 
 
@@ -65,7 +73,9 @@ def verificar_status(request):
                 ('3', "https://www.wunderground.com/dashboard/pws/INOVAF27"),
                 ('4', "https://www.wunderground.com/dashboard/pws/INOVAF26")
             ]
-    wds = []
+
+    dados = {}
+
     for i in FONTES:
         url = i[1]
         fonte = i[0]
@@ -76,17 +86,17 @@ def verificar_status(request):
         try:
             driver.get(url)
             WebDriverWait(driver, 100)
-            # wds = find_dados_via_bs(wds)
-            # wds["fonte"] = fonte
-            wd = find_dados_via_webdriver(driver)
-            wd["fonte"] = fonte
-            WeatherData.objects.create(**wd)
-            wds.append(wd)
+            
+            dados = fetch_dados_via_webdriver(driver, i[0])
+            WeatherData.objects.create(**dados)
+
         except Exception as ex:
             logging.warning("Can't fetch", ex, url)
         finally:
             driver.quit()
-    return HttpResponse(json.dumps(wds), content_type="application/json")
+
+    return HttpResponse(json.dumps(dados), content_type="application/json")
+
 
 
 def dados(request):
