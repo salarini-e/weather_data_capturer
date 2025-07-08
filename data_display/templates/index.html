@@ -1,29 +1,211 @@
 {% extends 'template.html' %}
 {% block css %}
+<style>
+    .hero-section {
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+    }
+    
+    .hero-title {
+        margin-bottom: 1.5rem;
+        color: #2c3e50;
+        font-weight: 700;
+    }
+    
+    .hero-subtitle {
+        color: #34495e;
+        font-size: 1.2rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+    
+    .github-link {
+        display: inline-flex;
+        align-items: center;
+        background-color: #f8f9fa;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 4px;
+        padding: 0.5rem 1rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.2s ease;
+        text-decoration: none !important;
+        color: #333 !important;
+    }
+    
+    .github-link:hover {
+        background-color: #e9ecef;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .info-card {
+        background-color: transparent;
+        border-radius: 8px;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
+        transition: transform 0.2s ease;
+    }
+
+    .info-card h5 {
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: #2c3e50;
+    }
+    
+    .info-card p {
+        color: #7f8c8d;
+        line-height: 1.5;
+        margin-bottom: 0;
+    }
+    
+    .icon-primary {
+        color: #3498db;
+    }
+    
+    .icon-success {
+        color: #2ecc71;
+    }
+    
+    .icon-warning {
+        color: #f39c12;
+    }
+    
+    .action-section {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .action-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1.25rem;
+        color: #2c3e50;
+    }
+    
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .action-buttons .btn {
+        padding: 0.6rem 1.2rem;
+        border-radius: 4px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+    
+    .action-buttons .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    .action-buttons .btn i {
+        margin-right: 0.5rem;
+    }
+    
+    .station-info {
+        border-top: 1px solid #eee;
+        padding-top: 1.5rem;
+        margin-top: 1.5rem;
+        color: #7f8c8d;
+    }
+    
+    .station-info strong {
+        color: #2c3e50;
+    }
+    
+    .logo-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .logo {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+</style>
 {% endblock %}
 {% block content %}
-            <div id="bemvindo" class="row m-auto px-5">                
-                <div class="col-9">
-                    <h1 class="display-4 text-uppercase">Capturador de Dados Meteorológicos</h1>
-                    <p class="lead my-3"><strong>Bem vindo!</strong> Aqui você tem acesso aos dados de quatro estações meteorológicas localizadas em Nova Friburgo.</p>
-                    <hr class="my-4">
-                    <p class="mb-3">Estas estações são mantidas pelo <strong><i><u>Instituto Friburgo Solidário</u></i></strong>, e neste site, os dados são obtidos por meio de Web Scraping das páginas de cada estação, a cada 15 minutos.</p>
-                    <p class="mb-4">Explore as informações coletados regularmente:</p>
-                    <div class="row">
-                        <div class="col d-flex">                            
-                            <a class="btn btn-success mr-1" href="{% url 'download' %}" role="button"><i class="fas fa-file-csv mr-2"></i>Gerar arquivo</a>
-                            <a class="btn btn-primary mr-1" href="{% url 'ver_dados' %}" role="button"><i class="fas fa-list mr-2"></i>Consultar online</a>
-                            <a class="btn btn-primary mr-1" href="{% url 'fontes' %}" role="button"><i class="fas fa-link mr-2"></i>Ver fontes</a>
-                            <a class="btn btn-secondary mr-1" href="#" onclick="alert('Em construção!')" role="button"><i class="fas fa-info-circle mr-2"></i>Saiba mais</a>
-                            
-                            <a class="btn btn-warning ml-auto" href="#" onclick="alert('Em construção!')" role="button"><i class="fas fa-bug mr-2"></i>Log de falhas</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-3">
-                    <img class="logo" src="/static/images/icone.jpg" alt="icone estação meteorológica">
+<div id="bemvindo" class="row m-auto px-5 justify-content-center">                
+    <div class="col-md-9 page-content">
+        <div class="hero-section">
+            <h1 class="hero-title display-4 text-uppercase">Capturador de Dados Meteorológicos</h1>
+            <p class="hero-subtitle">
+                <strong>Bem-vindo!</strong> Aqui você tem acesso aos dados de quatro estações meteorológicas localizadas em Nova Friburgo.
+                <br>Essa plataforma visa democratizar o acesso a dados meteorológicos locais de forma automática, colaborativa e intuitiva. 
+            </p>            
+            
+            <a href="https://github.com/salarini-e/weather_data_capturer" target="_blank" class="github-link">
+                <i class="fab fa-github fa-lg mr-2"></i>
+                <span>Projeto Open Source no GitHub</span>
+                <i class="fas fa-external-link-alt ml-2 small"></i>
+            </a>
+        </div>
+        
+        <!-- <div class="station-info mb-4">
+            <p>Estas estações são mantidas pelo <strong>Instituto Friburgo Solidário</strong>, e neste site, os dados são obtidos por meio de Web Scraping das páginas de cada estação, a cada 15 minutos.</p>
+        </div> -->
+        
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="info-card">
+                    <h5><i class="fas fa-chart-line mr-2 icon-primary"></i>Dados Precisos</h5>
+                    <p>Acesso a informações meteorológicas locais com atualização a cada 15 minutos para análises precisas.</p>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="info-card">
+                    <h5><i class="fas fa-cloud-download-alt mr-2 icon-success"></i>Fácil Acesso</h5>
+                    <p>Visualize online ou baixe em CSV para utilizar em suas pesquisas e análises científicas.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="info-card">
+                    <h5><i class="fas fa-users mr-2 icon-warning"></i>Colaborativo</h5>
+                    <p>Sugira novas estações e contribua para o fortalecimento da rede meteorológica.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="action-section">
+            <h5 class="action-title">O que você deseja fazer?</h5>
+            <div class="action-buttons">                            
+                <a class="btn btn-success" href="{% url 'download' %}" role="button">
+                    <i class="fas fa-file-csv"></i>Baixar dados
+                </a>
+                <a class="btn btn-primary" href="{% url 'ver_dados' %}" role="button">
+                    <i class="fas fa-chart-bar"></i>Explorar dados
+                </a>
+                <a class="btn btn-primary" href="{% url 'fontes' %}" role="button">
+                    <i class="fas fa-link"></i>Fontes dos dados
+                </a>                            
+                <a class="btn btn-info" href="{% url 'suggest_station' %}" role="button">
+                    <i class="fas fa-plus-circle"></i>Sugerir Estação
+                </a>
+                <a class="btn btn-secondary" href="{% url 'saiba_mais' %}" role="button">
+                    <i class="fas fa-info-circle"></i>Saiba mais
+                </a>
+                
+                {% if request.user.is_superuser %}
+                <a class="btn btn-dark" href="{% url 'manage_suggestions' %}" role="button">
+                    <i class="fas fa-cogs"></i>Gerenciar sugestões
+                </a>
+                {% endif %}
+                <a class="btn btn-warning {% if not request.user.is_superuser %}ml-auto{% endif %}" href="#" onclick="alert('Em construção!')" role="button">
+                    <i class="fas fa-bug"></i>Log de falhas
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 logo-container">
+        <img class="logo" src="/static/images/icone.jpg" alt="icone estação meteorológica">
+    </div>
+</div>
 {% endblock %}
 {% block js %}
 {% endblock %}

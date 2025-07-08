@@ -1,0 +1,227 @@
+{% extends 'template.html' %}
+{% block css %}
+<style>
+    h3 {
+        margin-top: 2.5rem;
+        margin-bottom: 1.5rem;
+        color: #495057;
+        border-bottom: 2px solid #566b81;
+        padding-bottom: 0.5rem;
+    }
+    p {
+        line-height: 1.7;
+        margin-bottom: 1.2rem;
+    }
+    .lead {
+        line-height: 1.8;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background-color: #f8f9fa;
+        border-left: 4px solid #007bff;
+        border-radius: 0 8px 8px 0;
+    }
+    ul {
+        margin-bottom: 1.5rem;
+        padding-left: 1.5rem;
+    }
+    li {
+        margin-bottom: 0.75rem;
+        line-height: 1.6;
+    }
+    .alert {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .alert h5 {
+        margin-bottom: 1rem;
+    }
+    .alert ul {
+        margin-top: 1rem;
+        margin-bottom: 0;
+    }
+    .row {
+        margin-bottom: 1.5rem;
+    }
+    .col-md-3, .col-md-4, .col-md-6 {
+        margin-bottom: 1.5rem;
+    }
+    .fa-3x {
+        margin-bottom: 1rem;
+    }
+    h5 {
+        margin-bottom: 1rem;
+        color: #495057;
+    }
+    h6 {
+        margin-bottom: 0.75rem;
+        margin-top: 0.5rem;
+        font-weight: 600;
+    }
+    .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        margin: 0.25rem;
+    }
+    .btn-lg {
+        padding: 0.875rem 2rem;
+        font-size: 1.1rem;
+    }
+    h1 {
+        margin-bottom: 1rem;
+    }
+    .display-4 {
+        margin-bottom: 1.5rem;
+    }
+</style>
+{% endblock %}
+{% block content %}
+        <div id="bemvindo" class="row m-auto px-5 justify-content-center">
+            <div class="col-md-9 d-flex flex-column page-content">
+                <h1 class="text-uppercase">Capturador de Dados Meteorológicos</h1>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h1 class="display-4 text-uppercase mb-0">Saiba Mais</h1>
+                    <a href="{% url 'suggest_station' %}" class="btn btn-info">
+                        <i class="fas fa-plus-circle mr-2"></i>Sugerir Estação
+                    </a>
+                </div>
+                <hr class="my-4">
+
+                <div class="alert alert-secondary mb-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fab fa-github fa-2x mr-3"></i>
+                        <div>
+                            <p class="mb-1"><strong>Projeto Open Source</strong></p>
+                            <a href="https://github.com/salarini-e/weather_data_capturer" target="_blank" class="text-dark">
+                                github.com/salarini-e/weather_data_capturer <i class="fas fa-external-link-alt ml-1 small"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="lead">
+                    Nossa missão é de democratizar o acesso a dados meteorológicos locais através de uma plataforma automática, colaborativa e intuitiva que fortalece a pesquisa científica e apoia a tomada de decisões.
+                </p>
+
+                <h3>1. Importância dos Dados Meteorológicos</h3>
+                <p>A coleta automatizada e pública de dados meteorológicos é fundamental para:</p>
+                <ul>
+                    <li><strong>Pesquisa Científica:</strong> Fornece insumos essenciais para estudos climáticos</li>
+                    <li><strong>Previsão e Monitoramento:</strong> Gera modelos operacionais para eventos extremos</li>
+                    <li><strong>Setores Estratégicos:</strong> Apoia agricultura, energia e planejamento urbano</li>
+                    <li><strong>Complementação Regional:</strong> Preenche lacunas em sistemas tradicionais como HadISD e ECA&D</li>
+                </ul>
+
+                <h3>2. Problemas Identificados</h3>
+                <div class="alert alert-warning">
+                    <h5><i class="fas fa-exclamation-triangle mr-2"></i>Principais Desafios</h5>
+                    <ul class="mb-0">
+                        <li><strong>Escassez de Cobertura Local:</strong> Redes como INMET e NOAA excluem muitas estações comunitárias</li>
+                        <li><strong>Falta de Visualização Acessível:</strong> Muitos dados exigem conhecimentos específicos</li>
+                        <li><strong>Processamento Manual Limitado:</strong> Baixar diversos CSV exige manipulação repetitiva</li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-success">
+                    <h5><i class="fas fa-lightbulb mr-2"></i>Nossa Solução</h5>
+                    <p class="mb-0"><strong>Este site oferece:</strong> captura automática via web scraping, visualização online e download direto em CSV — tudo de forma intuitiva e colaborativa.</p>
+                </div>
+
+                <h3>3. Base Científica</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5><i class="fas fa-spider mr-2"></i>Web Scraping</h5>
+                        <p>Frameworks acadêmicos demonstram que o web scraping viabiliza obtenção automática de dados meteorológicos.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5><i class="fas fa-globe mr-2"></i>Portais Climáticos</h5>
+                        <p>Sistemas como SIB-ESS, GIOVANNI e ATMOS processam e distribuem dados via web.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5><i class="fas fa-decision-tree mr-2"></i>Tomada de Decisões</h5>
+                        <p>Portais com CSV facilitam pesquisa e análise de extremos.</p>
+                    </div>
+                </div>
+
+                <h3>4. Objetivos do Projeto</h3>
+                <p><strong>Objetivo Geral:</strong> Construir uma plataforma robusta para coleta, visualização e compartilhamento de dados meteorológicos via web scraping.</p>
+                
+                <p><strong>Objetivos Específicos:</strong></p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul>
+                            <li>Automatizar coleta e consolidação dos dados</li>
+                            <li>Padronizar em formatos interoperáveis (CSV, tabelas)</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul>
+                            <li>Disponibilizar visualizações diretas e intuitivas</li>
+                            <li>Engajar usuários na ampliação da rede de estações</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>5. Metodologia</h3>
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <i class="fas fa-download fa-3x text-primary mb-2"></i>
+                        <h6>Web Scraping</h6>
+                        <p>Captura automática</p>
+                    </div>
+                    <div class="col-md-3">
+                        <i class="fas fa-sync-alt fa-3x text-success mb-2"></i>
+                        <h6>ETL Process</h6>
+                        <p>Filtros e correções</p>
+                    </div>
+                    <div class="col-md-3">
+                        <i class="fas fa-file-export fa-3x text-warning mb-2"></i>
+                        <h6>Exportação</h6>
+                        <p>CSV e dashboard</p>
+                    </div>
+                    <div class="col-md-3">
+                        <i class="fas fa-users-cog fa-3x text-info mb-2"></i>
+                        <h6>Colaboração</h6>
+                        <p>Sugestões de estações</p>
+                    </div>
+                </div>
+
+                <h3>6. Nossas Contribuições</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5><i class="fas fa-laptop-code mr-2"></i>Tecnológica</h5>
+                        <p>Plataforma automática e acessível para coleta de dados meteorológicos</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5><i class="fas fa-flask mr-2"></i>Científica</h5>
+                        <p>Base para análise de séries temporais e fomento da ciência cidadã</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5><i class="fas fa-heart mr-2"></i>Social</h5>
+                        <p>Integração comunitária e suporte a políticas públicas locais</p>
+                    </div>
+                </div>
+
+                <div class="alert alert-primary text-center mt-5 py-4">
+                    <h4 class="mb-3"><i class="fas fa-rocket mr-2"></i>Faça Parte da Nossa Rede!</h4>
+                    <p class="lead mb-4">Contribua para o fortalecimento da rede meteorológica brasileira.</p>
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'suggest_station' %}" class="btn btn-light btn-lg mx-2">
+                            <i class="fas fa-plus-circle mr-2"></i>Sugerir Estação
+                        </a>
+                        <a href="{% url 'ver_dados' %}" class="btn btn-light btn-lg mx-2">
+                            <i class="fas fa-chart-bar mr-2"></i>Explorar Dados
+                        </a>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4 mb-5">
+                    <a href="{% url 'index' %}" class="btn btn-primary">
+                        <i class="fas fa-arrow-left mr-2"></i>Voltar para Página Inicial
+                    </a>
+                </div>
+
+            </div>
+        </div>
+{% endblock %}
+{% block js %}
+{% endblock %}

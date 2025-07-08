@@ -1,26 +1,135 @@
 {% extends 'template.html' %}
 {% block css %}
+<style>
+    .sources-section, .suggestions-section {
+        margin-bottom: 2rem;
+    }
+    
+    .source-item {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .source-item:last-child {
+        border-bottom: none;
+    }
+    
+    .source-name {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.3rem;
+    }
+    
+    .source-url {
+        word-break: break-all;
+    }
+    
+    .suggestion-item {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .suggestion-name {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.3rem;
+    }
+    
+    .suggestion-status {
+        display: inline-block;
+        background-color: #ffc107;
+        color: #212529;
+        font-size: 0.8rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        margin-left: 0.5rem;
+    }
+    
+    .empty-message {
+        color: #6c757d;
+        font-style: italic;
+    }
+    
+    .section-title {
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #d9edfa;
+        color: #2c3e50;
+    }
+</style>
 {% endblock %}
-{% block content %}
-            <div id="bemvindo" class="row m-auto px-5">
+{% block content %} 
+<div id="bemvindo" class="row m-auto px-5 justify-content-center">
+    <div class="col-md-12 page-content">
+        <h1 class="text-uppercase">Capturador de Dados Meteorológicos</h1>
+        <h1 class="display-3 text-uppercase">Fontes dos dados</h1>
+        <hr class="my-4">
+        
+        <div class="row">
+            <!-- Coluna de Fontes Atuais -->
+            <div class="col-md-6 sources-section">
+                <h3 class="section-title">
+                    <i class="fas fa-database mr-2"></i>Fontes Ativas
+                </h3>
                 
-                <div class="col-9 d-flex flex-column">
-                    <h1 class="text-uppercase">Capturador de Dados Meteorológicos</h1>
-                    <h1 class="display-3 text-uppercase">Fontes dos dados</h1>
-                    <hr class="my-4">
-                    <ul>
+                {% if fontes %}
+                    <div class="list-group">
                         {% for fonte in fontes %}
-                        <li class="mb-2">{{fonte.id}}. {{fonte.name}}<br>
-                            <a href="{{fonte.url}}">{{fonte.url}}</a>                            
-                        </li>
+                        <div class="source-item">
+                            <div class="source-name">{{fonte.id}}. {{fonte.name}}</div>
+                            <a href="{{fonte.url}}" target="_blank" class="source-url">
+                                {{fonte.url}} <i class="fas fa-external-link-alt ml-1 small"></i>
+                            </a>                            
+                        </div>
                         {% endfor %}
-                    </ul>
-                    <a href="/" class="mt-5 btn btn-primary mx-auto">Voltar</a>
-                </div>
-                <div class="col-3">
-                    <img class="logo" src="/static/images/icone.jpg" alt="icone estação meteorológica">
-                </div>
+                    </div>
+                {% else %}
+                    <p class="empty-message">Nenhuma fonte cadastrada ainda.</p>
+                {% endif %}
             </div>
+            
+            <!-- Coluna de Sugestões Pendentes -->
+            <div class="col-md-6 suggestions-section">
+                <h3 class="section-title">
+                    <i class="fas fa-clock mr-2"></i>Sugestões em Análise
+                </h3>
+                
+                {% if sugestoes_pendentes %}
+                    {% for sugestao in sugestoes_pendentes %}
+                    <div class="suggestion-item">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="suggestion-name">{{sugestao.name}}</div>
+                            <div class="suggestion-status">Aguardando aprovação</div>
+                        </div>
+                        <a href="{{sugestao.url}}" target="_blank" class="source-url">
+                            {{sugestao.url}} <i class="fas fa-external-link-alt ml-1 small"></i>
+                        </a>
+                        {% if sugestao.message %}
+                            <div class="mt-2 text-muted">
+                                <small><em>{{sugestao.message}}</em></small>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="empty-message mb-4">Não há sugestões de estações em análise no momento.</p>
+                    <!-- <p>Você pode <a href="{% url 'suggest_station' %}" class="text-info">sugerir uma nova estação</a> para ser adicionada ao sistema.</p> -->
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="text-center mt-5 mb-5">
+            <a href="{% url 'index' %}" class="btn btn-primary">
+                <i class="fas fa-arrow-left mr-2"></i>Voltar para Página Inicial
+            </a>
+            <a href="{% url 'suggest_station' %}" class="btn btn-info ml-2">
+                <i class="fas fa-plus-circle mr-2"></i>Sugerir Nova Estação
+            </a>
+        </div>
+    </div>
+</div>
 {% endblock %}
 {% block js %}
 {% endblock %}

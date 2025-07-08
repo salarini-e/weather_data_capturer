@@ -7,6 +7,28 @@ class DataSource(models.Model):
     def __str__(self):
         return self.name
     
+class StationSuggestion(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pendente'),
+        ('approved', 'Aprovada'),
+        ('rejected', 'Rejeitada'),
+    ]
+    
+    name = models.CharField(max_length=100, verbose_name='Nome da Estação')
+    url = models.URLField(verbose_name='URL da Estação')
+    message = models.TextField(blank=True, null=True, verbose_name='Observações/Mensagem')
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending', verbose_name='Status')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.name} - {self.get_status_display()}"
+    
+    class Meta:
+        verbose_name = 'Sugestão de Estação'
+        verbose_name_plural = 'Sugestões de Estações'
+        ordering = ['-created_at']
+    
 class WeatherData(models.Model):
 
     FONTE_CHOICES=[       

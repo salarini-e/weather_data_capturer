@@ -125,3 +125,8 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Session settings
+SESSION_COOKIE_AGE = 86400 * 3  # 3 dias em segundos
+SESSION_SAVE_EVERY_REQUEST = True  # Renovar a sessão a cada requisição
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Sessão persiste mesmo após fechar o navegador

@@ -30,7 +30,7 @@ def find_dados_via_bs(driver):
 
     return {
         'temperature': dados_[0],
-        'wind_gust_direction': dados_[2],
+        'wind_gust_direction':  dados_[2],
         'wind_gust': dados_[3],
         'dewpoint': dados_[4],
         'precip_rate': dados_[5],

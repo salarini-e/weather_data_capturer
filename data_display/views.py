@@ -4,10 +4,10 @@ from datetime import datetime
 import json
 from django.http import HttpResponse, JsonResponse
 from django.core.serializers import serialize
-
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from data_scraper.models import WeatherData, DataSource
+from data_scraper.models import WeatherData, DataSource, StationSuggestion
 
 # Create your views here.
 def index(request):
@@ -16,7 +16,8 @@ def index(request):
 
 def fontes(request):
     context = {
-        'fontes': DataSource.objects.all()
+        'fontes': DataSource.objects.all(),
+        'sugestoes_pendentes': StationSuggestion.objects.filter(status='pending')
     }
     return render(request, 'fontes.html', context)
 
@@ -109,3 +110,78 @@ def json_dados(request,  fonte_id, dt_start, dt_end):
 
             })
         return JsonResponse(valores, safe=False)
+
+
+@csrf_exempt
+def suggest_station(request):
+    """View para usuários sugerirem novas estações"""
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        url = request.POST.get('url')
+        message = request.POST.get('message', '')
+        
+        if name and url:
+            suggestion = StationSuggestion.objects.create(
+                name=name,
+                url=url,
+                message=message
+            )
+            messages.success(request, 'Sugestão enviada com sucesso! Obrigado pela contribuição.')
+            return redirect('suggest_station')
+        else:
+            messages.error(request, 'Nome e URL são obrigatórios.')
+    
+    return render(request, 'suggest_station.html')
+
+
+def manage_suggestions(request):
+    """View para administradores gerenciarem as sugestões"""
+    if not request.user.is_superuser:
+        return render(request, '403.html', status=403)
+    suggestions = StationSuggestion.objects.all()
+    return render(request, 'manage_suggestions.html', {'suggestions': suggestions})
+
+
+@csrf_exempt
+def approve_suggestion(request, suggestion_id):
+    """View para aprovar uma sugestão e criar um DataSource"""
+    if request.method == 'POST':
+        suggestion = get_object_or_404(StationSuggestion, id=suggestion_id)
+        
+        if suggestion.status == 'pending':
+            # Criar o DataSource
+            data_source = DataSource.objects.create(
+                name=suggestion.name,
+                url=suggestion.url
+            )
+            
+            # Atualizar status da sugestão
+            suggestion.status = 'approved'
+            suggestion.save()
+            
+            messages.success(request, f'Sugestão aprovada! DataSource "{suggestion.name}" criado com sucesso.')
+        else:
+            messages.warning(request, 'Esta sugestão já foi processada.')
+    
+    return redirect('manage_suggestions')
+
+
+@csrf_exempt
+def reject_suggestion(request, suggestion_id):
+    """View para rejeitar uma sugestão"""
+    if request.method == 'POST':
+        suggestion = get_object_or_404(StationSuggestion, id=suggestion_id)
+        
+        if suggestion.status == 'pending':
+            suggestion.status = 'rejected'
+            suggestion.save()
+            messages.success(request, f'Sugestão "{suggestion.name}" rejeitada.')
+        else:
+            messages.warning(request, 'Esta sugestão já foi processada.')
+    
+    return redirect('manage_suggestions')
+
+
+def saiba_mais(request):
+    """View para a página Saiba Mais"""
+    return render(request, 'saiba_mais.html')

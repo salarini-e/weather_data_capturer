@@ -2,14 +2,14 @@
 {% block css %}
 {% endblock %}
 {% block content %}
-            <div id="bemvindo" class="row m-auto px-5">
+            <div id="bemvindo" class="row m-auto px-5 justify-content-center">
                 
-                <div class="col-9">
+                <div class="col-md-9 page-content">
                     <h1 class="display-4 text-uppercase">Dados Meteorológicos</h1>                                          
                     <div class="row mb-3">
                         <div class="col d-flex">                                                      
                             <p class="lead my-3">Os dados abaixo são do periodo de {{startdate}} até {{enddate}}</p>  
-                            <a class="btn btn-primary my-auto ml-auto" href="{% url 'ver_dados' %}" role="button">Voltar</a>
+                            <a class="btn btn-primary my-auto ml-auto" href="{% url 'index' %}" role="button">Voltar para Página Inicial</a>
                         </div>
                     </div>
                     <div class="row">

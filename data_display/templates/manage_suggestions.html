@@ -1,0 +1,227 @@
+{% extends 'template.html' %}
+{% block css %}
+<style>
+    .stats-cards {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 2.5rem;
+        gap: 1rem;
+    }
+    .stat-card {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        text-align: center;
+        flex: 1;
+    }
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    .status-badge {
+        font-size: 0.8rem;
+        font-weight: bold;
+        padding: 0.25rem 0.5rem;
+    }
+    .status-pending {
+        background-color: #ffc107;
+        color: #212529;
+    }
+    .status-approved {
+        background-color: #28a745;
+        color: white;
+    }
+    .status-rejected {
+        background-color: #dc3545;
+        color: white;
+    }
+    .table-responsive {
+        max-height: 500px;
+        overflow-y: auto;
+        margin-bottom: 2rem;
+    }
+    .table {
+        margin-bottom: 0;
+    }
+    .table th {
+        padding: 1rem 0.75rem;
+        font-weight: 600;
+    }
+    .table td {
+        padding: 1rem 0.75rem;
+        vertical-align: middle;
+    }
+    .message-cell {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .url-cell {
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .btn-sm {
+        font-size: 0.8rem;
+        padding: 0.375rem 0.75rem;
+        margin: 0.125rem;
+    }
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #6c757d;
+    }
+    .alert {
+        margin-bottom: 2rem;
+    }
+    h1 {
+        margin-bottom: 1rem;
+    }
+    .display-4 {
+        margin-bottom: 1.5rem;
+    }
+    .btn {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        margin: 0.25rem;
+    }
+</style>
+{% endblock %}
+{% block content %}
+        <div id="bemvindo" class="row m-auto px-5 justify-content-center">
+            <div class="col-md-10 page-content">
+                <h1 class="text-uppercase">Capturador de Dados Meteorológicos</h1>
+                <h1 class="display-3 text-uppercase">Gerenciar Sugestões</h1>
+                <hr class="my-4">
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                            {{ message }}
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span>&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-number">{{ suggestions|length }}</div>
+                        <div class="stat-label">Total de Sugestões</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">
+                            {% for s in suggestions %}
+                                {% if s.status == 'pending' %}{{ forloop.counter0|add:'1' }}{% endif %}
+                            {% empty %}0{% endfor %}
+                        </div>
+                        <div class="stat-label">Pendentes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">
+                            {% for s in suggestions %}
+                                {% if s.status == 'approved' %}{{ forloop.counter0|add:'1' }}{% endif %}
+                            {% empty %}0{% endfor %}
+                        </div>
+                        <div class="stat-label">Aprovadas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">
+                            {% for s in suggestions %}
+                                {% if s.status == 'rejected' %}{{ forloop.counter0|add:'1' }}{% endif %}
+                            {% empty %}0{% endfor %}
+                        </div>
+                        <div class="stat-label">Rejeitadas</div>
+                    </div>
+                </div>
+
+                {% if suggestions %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Nome da Estação</th>
+                                    <th>URL</th>
+                                    <th>Observações</th>
+                                    <th>Status</th>
+                                    <th>Data</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for suggestion in suggestions %}
+                                    <tr>
+                                        <td><strong>{{ suggestion.name }}</strong></td>
+                                        <td class="url-cell">
+                                            <a href="{{ suggestion.url }}" target="_blank" title="{{ suggestion.url }}">
+                                                {{ suggestion.url|truncatechars:30 }}
+                                            </a>
+                                        </td>
+                                        <td class="message-cell" title="{{ suggestion.message }}">
+                                            {{ suggestion.message|truncatechars:50|default:"Nenhuma observação" }}
+                                        </td>
+                                        <td>
+                                            <span class="badge status-{{ suggestion.status }}">
+                                                {{ suggestion.get_status_display }}
+                                            </span>
+                                        </td>
+                                        <td>{{ suggestion.created_at|date:"d/m/Y H:i" }}</td>
+                                        <td>
+                                            {% if suggestion.status == 'pending' %}
+                                                <form method="post" action="{% url 'approve_suggestion' suggestion.id %}" style="display: inline;">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-success btn-sm" 
+                                                            onclick="return confirm('Tem certeza que deseja aprovar esta sugestão? Isso criará um novo DataSource.')">
+                                                        <i class="fas fa-check mr-1"></i>Aprovar
+                                                    </button>
+                                                </form>
+                                                <form method="post" action="{% url 'reject_suggestion' suggestion.id %}" style="display: inline;">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger btn-sm"
+                                                            onclick="return confirm('Tem certeza que deseja rejeitar esta sugestão?')">
+                                                        <i class="fas fa-times mr-1"></i>Rejeitar
+                                                    </button>
+                                                </form>
+                                            {% else %}
+                                                <span class="text-muted font-italic">
+                                                    {{ suggestion.get_status_display }}
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="empty-state">
+                        <div class="alert alert-info">
+                            <h4><i class="fas fa-inbox mr-2"></i>Nenhuma sugestão encontrada</h4>
+                            <p class="mb-0">Ainda não há sugestões de estações meteorológicas no sistema.</p>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <div class="mt-4 text-center">
+                    <a href="{% url 'index' %}" class="btn btn-primary">
+                        <i class="fas fa-arrow-left mr-2"></i>Voltar ao Início
+                    </a>
+                    <a href="{% url 'suggest_station' %}" class="btn btn-info ml-2">
+                        <i class="fas fa-plus-circle mr-2"></i>Nova Sugestão
+                    </a>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+{% block js %}
+{% endblock %}

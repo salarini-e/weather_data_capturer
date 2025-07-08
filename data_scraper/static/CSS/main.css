@@ -7,3 +7,21 @@ html, body{
     margin: 0 auto;
     display: block;
 }
+
+#bemvindo {
+    max-width: 1400px;
+    width: 100%;
+}
+
+.page-content {
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+
+.table-responsive {
+    margin-bottom: 30px;
+}
+
+.btn {
+    margin-bottom: 10px;
+}
