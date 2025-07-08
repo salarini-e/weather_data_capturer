@@ -54,9 +54,8 @@ def find_dados_via_webdriver(driver):
 def get_dados(request):
     FONTES = DataSource.objects.all()
     wds = []
-    for i in FONTES:
-        url = i.url
-        fonte = i.id
+    for fonte in FONTES:
+        url = fonte.url
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         driver = webdriver.Chrome(options=chrome_options)
@@ -64,11 +63,14 @@ def get_dados(request):
             driver.get(url)
             WebDriverWait(driver, 100)
             wd = find_dados_via_webdriver(driver)
+            # Agora passamos o objeto DataSource diretamente
             wd["fonte"] = fonte
             WeatherData.objects.create(**wd)
+            # Adicionamos o nome da fonte para o retorno JSON
+            wd["fonte_nome"] = fonte.name
             wds.append(wd)
         except Exception as ex:
-            logging.warning("Can't fetch", ex, url)
+            logging.warning(f"Can't fetch {url}: {ex}")
         finally:
             driver.quit()
     return HttpResponse(json.dumps(wds), content_type="application/json")
@@ -77,8 +79,9 @@ def create_demo_sources(request):
     if DataSource.objects.all().exists():
         return HttpResponse("OK. DEMO SOURCES ALREADY CREATED")
     
-    DataSource.objects.create(name="Pico do Caledônia", url="https://www.wunderground.com/dashboard/pws/IRIOGRAN2")
-    DataSource.objects.create(name="Stucky", url="https://www.wunderground.com/dashboard/pws/IRIOGRAN3")
-    DataSource.objects.create(name="Barão (Jardim Califórnia)", url="https://www.wunderground.com/dashboard/pws/IRIOGRAN4")
-    DataSource.objects.create(name="Edifício Itália (Centro)", url="https://www.wunderground.com/dashboard/pws/IRIOGRAN5")
+    # URLs atualizadas das estações meteorológicas
+    DataSource.objects.create(name="Pico do Caledônia", url="https://www.wunderground.com/dashboard/pws/INOVAF18")
+    DataSource.objects.create(name="Stucky", url="https://www.wunderground.com/dashboard/pws/INOVAF19")
+    DataSource.objects.create(name="Barão (Jardim Califórnia)", url="https://www.wunderground.com/dashboard/pws/INOVAF27")
+    DataSource.objects.create(name="Edifício Itália (Centro)", url="https://www.wunderground.com/dashboard/pws/INOVAF26")
     return HttpResponse("OK. DEMO SOURCES CREATED")

@@ -18,5 +18,23 @@ class StationSuggestionAdmin(admin.ModelAdmin):
         }),
     )
 
-admin.site.register(WeatherData)
-admin.site.register(DataSource)
+@admin.register(WeatherData)
+class WeatherDataAdmin(admin.ModelAdmin):
+    list_display = ['date', 'fonte', 'temperature', 'humidity', 'pressure']
+    list_filter = ['fonte', 'date']
+    search_fields = ['fonte__name']
+    date_hierarchy = 'date'
+    
+    fieldsets = (
+        (None, {
+            'fields': ('fonte', 'date')
+        }),
+        ('Dados Meteorológicos', {
+            'fields': ('temperature', 'humidity', 'pressure', 'wind_gust', 'wind_gust_direction', 'dewpoint', 'precip_rate', 'precip_accum', 'uv')
+        }),
+    )
+
+@admin.register(DataSource)
+class DataSourceAdmin(admin.ModelAdmin):
+    list_display = ['name', 'url']
+    search_fields = ['name']

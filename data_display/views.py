@@ -35,14 +35,18 @@ def export_weather_data(request):
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
         print(fonte)
         # Consulte o banco de dados para recuperar os dados dentro do intervalo de tempo especificado
-        weather_data = WeatherData.objects.filter(date__range=(start_date, end_date), fonte=fonte)
+        weather_data = WeatherData.objects.filter(date__range=(start_date, end_date), fonte__id=fonte)
 
         # Crie a resposta CSV
         # Get the current date
         today = date.today()
         current_date = today.strftime("%Y-%m-%d")
+        
+        # Obter o nome da fonte
+        fonte_obj = DataSource.objects.get(id=fonte)
+        
         response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = f'attachment; filename="f{fonte}_{current_date}_weather_data.csv"'
+        response['Content-Disposition'] = f'attachment; filename="{fonte_obj.name}_{current_date}_weather_data.csv"'
 
         # Escreva os dados no arquivo CSV
         writer = csv.writer(response)
@@ -59,17 +63,17 @@ def export_weather_data(request):
                 data.humidity,
                 data.precip_accum,
                 data.uv,
-                data.fonte
+                data.fonte.name
             ])
 
         return response
 
-    return render(request, 'filter.html', context={'fontes': WeatherData.FONTE_CHOICES})
+    return render(request, 'filter.html', context={'fontes': DataSource.objects.all()})
 
 
 @csrf_exempt
 def view_weather_data(request):
-    context={'fontes': WeatherData.FONTE_CHOICES}
+    context={'fontes': DataSource.objects.all()}
     if request.method == 'POST':
         start_date_str = request.POST.get('startdate')
         end_date_str = request.POST.get('enddate')
@@ -78,7 +82,7 @@ def view_weather_data(request):
         start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
         end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
 
-        weather_data = WeatherData.objects.filter(date__range=(start_date, end_date), fonte=fonte)
+        weather_data = WeatherData.objects.filter(date__range=(start_date, end_date), fonte__id=fonte)
         context['startdate'] = start_date_str
         context['enddate'] = end_date_str
         context['datas'] = weather_data
@@ -92,7 +96,7 @@ def json_fontes(request):
     return JsonResponse(json.loads(serialize('json', fontes)), safe=False)
 
 def json_dados(request,  fonte_id, dt_start, dt_end):
-        dados = WeatherData.objects.filter(date__range=(dt_start, dt_end), fonte=fonte_id)
+        dados = WeatherData.objects.filter(date__range=(dt_start, dt_end), fonte__id=fonte_id)
         valores = []
         for dado in dados:
             valores.append({
@@ -106,8 +110,7 @@ def json_dados(request,  fonte_id, dt_start, dt_end):
                 'precip_accum': dado.precip_accum,
                 'uv': dado.uv,
                 'date': dado.date,
-                'fonte': dado.fonte
-
+                'fonte': dado.fonte.name
             })
         return JsonResponse(valores, safe=False)
 
