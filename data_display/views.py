@@ -139,7 +139,13 @@ def manage_suggestions(request):
     if not request.user.is_superuser:
         return render(request, '403.html', status=403)
     suggestions = StationSuggestion.objects.all()
-    return render(request, 'manage_suggestions.html', {'suggestions': suggestions})
+    context= {
+                'suggestions': suggestions,
+                'total_pending': suggestions.filter(status='pending').count(),
+                'total_approved': suggestions.filter(status='approved').count(),
+                'total_rejected': suggestions.filter(status='rejected').count(),
+              }
+    return render(request, 'manage_suggestions.html', context)
 
 
 @csrf_exempt

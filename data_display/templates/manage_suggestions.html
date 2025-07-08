@@ -121,25 +121,19 @@
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">
-                            {% for s in suggestions %}
-                                {% if s.status == 'pending' %}{{ forloop.counter0|add:'1' }}{% endif %}
-                            {% empty %}0{% endfor %}
+                            {{total_pending|default:0 }}                            
                         </div>
                         <div class="stat-label">Pendentes</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">
-                            {% for s in suggestions %}
-                                {% if s.status == 'approved' %}{{ forloop.counter0|add:'1' }}{% endif %}
-                            {% empty %}0{% endfor %}
+                            {{total_approved|default:0 }}
                         </div>
                         <div class="stat-label">Aprovadas</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number">
-                            {% for s in suggestions %}
-                                {% if s.status == 'rejected' %}{{ forloop.counter0|add:'1' }}{% endif %}
-                            {% empty %}0{% endfor %}
+                          {{total_rejected|default:0 }}
                         </div>
                         <div class="stat-label">Rejeitadas</div>
                     </div>
