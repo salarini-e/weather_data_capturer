@@ -24,7 +24,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = 'django-insecure-68((!5k4h-hf8l&kwms7v_p0p)^qms-6&0unm4r93u=)z^%$7r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['cdm.esalarini.com.br', '127.0.0.1', 'localhost']
 
